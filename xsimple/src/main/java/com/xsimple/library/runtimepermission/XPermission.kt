@@ -80,11 +80,11 @@ open class XPermission {
 
         if(permissionDelegate.shouldShowRequestPermissionRationale(permission)) {
             onShouldShowRationaleListener.onShould(object : PermissionProcess{
-                override fun proceed() { permissionDelegate.requestPermission(permission, onShouldShowRationaleListener) }
+                override fun proceed() { permissionDelegate.requestPermission(permission) }
             })
         }
         else {
-            permissionDelegate.requestPermission(permission, onShouldShowRationaleListener)
+            permissionDelegate.requestPermission(permission)
         }
     }
 

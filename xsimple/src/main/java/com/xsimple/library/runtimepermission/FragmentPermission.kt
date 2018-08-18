@@ -16,8 +16,8 @@ internal class FragmentPermission(private val fragment: Fragment) : PermissionDe
         return ContextCompat.checkSelfPermission(fragment.context, permission) == PackageManager.PERMISSION_GRANTED
     }
 
-    override fun requestPermission(permission: String, requestCode: OnShouldShowRationaleListener) {
-        fragment.requestPermissions(arrayOf(permission), requestCode)
+    override fun requestPermission(permission: String) {
+        fragment.requestPermissions(arrayOf(permission), permission.getPermissionCode())
     }
 
     override fun shouldShowRequestPermissionRationale(permission: String): Boolean {

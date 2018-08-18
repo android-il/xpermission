@@ -6,5 +6,5 @@ package com.xsimple.library.runtimepermission
 
 data class PermissionRequest(val permission: String,
                              val onGrantedPermissionListener: OnGrantedPermissionListener,
-                             val onShouldShowRequestPermissionRationaleListener: OnShouldShowRequestPermissionRationaleListener,
+                             val onShouldShowRationaleListener: OnShouldShowRationaleListener,
                              val onDeniedPermissionListener: OnDeniedPermissionListener)

@@ -25,18 +25,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleLocationPermission() {
-        permission.requestPermission(Manifest.permission.ACCESS_COARSE_LOCATION,
+        permission.requestPermission(Manifest.permission.ACCESS_FINE_LOCATION,
                 onGrant {
 
                 },
                 onShouldShowRationale { permissionProcess ->
-                    alert("XPermission denied", "") {
+                    alert("XPermission need location", "") {
                         yesButton { permissionProcess.proceed() }
                         noButton { toast("Oh…") }
                     }.show()
                 },
                 onDenied { neverAskAgainChecked ->
-
+                    alert("XPermission denied", "") {
+                        yesButton {
+                            if (neverAskAgainChecked) permission.navigateToAppSettings()
+                        }
+                        noButton { toast("Oh…") }
+                    }.show()
                 })
     }
 
