@@ -73,10 +73,19 @@ open class XPermission {
      */
     fun requestPermission(permission: String,
                           onGrantedPermissionListener: OnGrantedPermissionListener = onGrant {},
-                          onShouldShowRequestPermissionRationaleListener: OnShouldShowRequestPermissionRationaleListener = onShould {},
+                          onShouldShowRationaleListener: OnShouldShowRationaleListener = onShouldShowRationale {},
                           onDeniedPermissionListener: OnDeniedPermissionListener = onDenied {}) {
-        permissionRequestMap.put(permission, PermissionRequest(permission, onGrantedPermissionListener,onShouldShowRequestPermissionRationaleListener, onDeniedPermissionListener))
-        permissionDelegate.requestPermission(permission, Int.MAX_VALUE)
+
+        permissionRequestMap.put(permission, PermissionRequest(permission, onGrantedPermissionListener,onShouldShowRationaleListener, onDeniedPermissionListener))
+
+        if(permissionDelegate.shouldShowRequestPermissionRationale(permission)) {
+            onShouldShowRationaleListener.onShould(object : PermissionProcess{
+                override fun proceed() { permissionDelegate.requestPermission(permission, onShouldShowRationaleListener) }
+            })
+        }
+        else {
+            permissionDelegate.requestPermission(permission, onShouldShowRationaleListener)
+        }
     }
 
     /**
@@ -104,7 +113,9 @@ open class XPermission {
                     permissionRequest.onGrantedPermissionListener.onGranted()
                     permissionRequestMap.remove(s)
                 }
-                PackageManager.PERMISSION_DENIED -> permissionRequest.onDeniedPermissionListener.onDenied(!permissionDelegate.shouldShowRequestPermissionRationale(s))
+                PackageManager.PERMISSION_DENIED -> {
+                    permissionRequest.onDeniedPermissionListener.onDenied(!permissionDelegate.shouldShowRequestPermissionRationale(s))
+                }
             }
         }
     }
@@ -121,14 +132,13 @@ open class XPermission {
             action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
             data = Uri.fromParts("package", permissionDelegate.provideContext().packageName, null)
         }
-        permissionDelegate.startActivityForResult(intent, this.javaClass.name.getCode())
+        permissionDelegate.startActivityForResult(intent, this.javaClass.name.getPermissionCode())
     }
 
     /**
      *
      * Handle {@link #navigateToAppSettings()} result
      * TODO DETERMINE LOGIC
-     *
      */
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         permissionRequestMap.forEach {

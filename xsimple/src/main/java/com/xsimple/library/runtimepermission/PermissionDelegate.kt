@@ -11,7 +11,7 @@ internal interface PermissionDelegate {
 
     fun hasPermission(permission: String) : Boolean
 
-    fun requestPermission(permission: String,requestCode : Int)
+    fun requestPermission(permission: String, requestCode: OnShouldShowRationaleListener)
 
     fun shouldShowRequestPermissionRationale(permission: String) : Boolean
 

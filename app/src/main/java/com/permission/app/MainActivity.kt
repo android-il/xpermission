@@ -1,12 +1,13 @@
 package com.permission.app
 
-import android.Manifest.permission.ACCESS_COARSE_LOCATION
+import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.xsimple.library.runtimepermission.XPermission
 import com.xsimple.library.runtimepermission.onDenied
 import com.xsimple.library.runtimepermission.onGrant
+import com.xsimple.library.runtimepermission.onShouldShowRationale
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.toast
@@ -20,15 +21,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        permission.requestPermission(ACCESS_COARSE_LOCATION,
+        handleLocationPermission()
+    }
+
+    private fun handleLocationPermission() {
+        permission.requestPermission(Manifest.permission.ACCESS_COARSE_LOCATION,
                 onGrant {
 
                 },
-                onDenied { neverAskAgainChecked ->
+                onShouldShowRationale { permissionProcess ->
                     alert("XPermission denied", "") {
-                        yesButton { toast("Oh…") }
-                        noButton {}
+                        yesButton { permissionProcess.proceed() }
+                        noButton { toast("Oh…") }
                     }.show()
+                },
+                onDenied { neverAskAgainChecked ->
+
                 })
     }
 

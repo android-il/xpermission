@@ -17,8 +17,8 @@ internal class ActivityPermission constructor(private val activity: Activity) : 
         return ContextCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_GRANTED
     }
 
-    override fun requestPermission(permission: String,requestCode : Int) {
-        ActivityCompat.requestPermissions(activity, arrayOf(permission), requestCode)
+    override fun requestPermission(permission: String, onShouldShowRationaleListener: OnShouldShowRationaleListener) {
+        ActivityCompat.requestPermissions(activity, arrayOf(permission), permission.getPermissionCode())
     }
 
     override fun shouldShowRequestPermissionRationale(permission: String): Boolean {

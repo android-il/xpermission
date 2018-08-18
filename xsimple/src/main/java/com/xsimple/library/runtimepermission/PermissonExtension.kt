@@ -12,6 +12,6 @@ package com.xsimple.library.runtimepermission
  * @return Int - sum of all string byte
  */
 
-internal fun String.getCode(): Int = this.toByteArray().sum()
+internal fun String.getPermissionCode(): Int = this.toByteArray().sum()
 
 
