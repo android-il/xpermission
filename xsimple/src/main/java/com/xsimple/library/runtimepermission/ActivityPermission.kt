@@ -6,39 +6,30 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-import java.lang.ref.WeakReference
 
 /**
  * Created by dvirdaniel on 24/03/2018.
  */
 
-internal class ActivityPermission constructor(private val activity: WeakReference<Activity>) : PermissionDelegate {
+internal class ActivityPermission constructor(private val activity: Activity) : PermissionDelegate {
 
     override fun hasPermission(permission: String): Boolean {
-        provideContext().whenNotNull {
-            return ContextCompat.checkSelfPermission(it, permission) == PackageManager.PERMISSION_GRANTED
-        }
-        return false
+        return ContextCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_GRANTED
     }
 
     override fun requestPermission(permission: String) {
-        activity.get().whenNotNull {
-                ActivityCompat.requestPermissions(it, arrayOf(permission), permission.getPermissionCode())
-        }
+        ActivityCompat.requestPermissions(activity, arrayOf(permission), permission.getPermissionCode())
     }
 
     override fun shouldShowRequestPermissionRationale(permission: String): Boolean {
-        activity.get().whenNotNull {
-            return ActivityCompat.shouldShowRequestPermissionRationale(it, permission)
-        }
-        return false
+        return ActivityCompat.shouldShowRequestPermissionRationale(activity,permission)
     }
 
-    override fun provideContext(): Context? {
-        return activity.get()
+    override fun provideContext(): Context {
+        return activity
     }
 
     override fun startActivityForResult(intent: Intent, requestCode: Int) {
-        activity.get()?.startActivityForResult(intent, requestCode)
+        activity.startActivityForResult(intent, requestCode)
     }
 }

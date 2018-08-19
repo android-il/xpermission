@@ -120,7 +120,6 @@ open class XPermission {
         }
     }
 
-
     /**
      *
      * Navigate the user to app settings activity
