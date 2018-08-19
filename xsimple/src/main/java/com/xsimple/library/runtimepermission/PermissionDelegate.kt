@@ -15,7 +15,7 @@ internal interface PermissionDelegate {
 
     fun shouldShowRequestPermissionRationale(permission: String) : Boolean
 
-    fun provideContext(): Context
+    fun provideContext(): Context?
 
     fun startActivityForResult(intent: Intent, requestCode: Int)
 

@@ -15,3 +15,7 @@ package com.xsimple.library.runtimepermission
 internal fun String.getPermissionCode(): Int = this.toByteArray().sum()
 
 
+internal inline fun <T> T?.whenNotNull(block: (T) -> Unit) {
+    this?:return
+    block(this)
+}
