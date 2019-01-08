@@ -121,6 +121,18 @@ open class XPermission {
     }
 
     /**
+     * Handle {@link #navigateToAppSettings()} result
+     */
+    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        permissionRequestMap.forEach {
+            if (hasPermission(it.value.permission)) {
+                it.value.onGrantedPermissionListener.onGranted()
+                permissionRequestMap.remove(it.key)
+            }
+        }
+    }
+
+    /**
      *
      * Navigate the user to app settings activity
      * for solve his permission issues
@@ -134,17 +146,5 @@ open class XPermission {
         permissionDelegate.startActivityForResult(intent, this.javaClass.name.getPermissionCode())
     }
 
-    /**
-     *
-     * Handle {@link #navigateToAppSettings()} result
-     * TODO DETERMINE LOGIC
-     */
-    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        permissionRequestMap.forEach {
-            if (hasPermission(it.value.permission)) {
-                it.value.onGrantedPermissionListener.onGranted()
-                permissionRequestMap.remove(it.key)
-            }
-        }
-    }
+
 }
